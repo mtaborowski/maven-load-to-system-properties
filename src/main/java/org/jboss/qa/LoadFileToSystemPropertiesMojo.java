@@ -30,6 +30,11 @@ import org.apache.maven.project.MavenProject;
  * The Plugin creates a property which would contains all the loaded properties
  * in the way of -DpropName=propValue
  * 
+ * Other bonus feature is that the properties could be defined in way of default properties
+ * like for jboss products
+ * property.name=${property.value:default-value}
+ * (parsing is done in really simple way).
+ * 
  * Note: check the configuration option <systemPropertiesFile></systemPropertiesFile>
  * of maven surefire plugin where you can pass system properties from file as well.
  *  
@@ -69,6 +74,9 @@ public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
 
   public void execute() throws MojoExecutionException {
     getLog().info("Starting loading properties from files");
+    // Doing system properties snapshot :)
+    Properties systemPropertiesAtStart = new Properties();
+    systemPropertiesAtStart.putAll(System.getProperties());
     
     StringBuffer allPropertiesString = new StringBuffer();
     // There is a problem of arquillian-container-jboss does parsing the properties
@@ -88,7 +96,9 @@ public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
           loadedProperties.load(fis);
           
           for(String loadedPropName: loadedProperties.stringPropertyNames()) {
-            String loadedPropValue = loadedProperties.getProperty(loadedPropName);
+            String loadedPropRawValue = loadedProperties.getProperty(loadedPropName);
+            String loadedPropValue = evaluateProperty(loadedPropRawValue, systemPropertiesAtStart);
+            
             getLog().debug("Loading property " + loadedPropName + "=" + loadedPropValue);
             
             // This seems to be for nothing
@@ -135,6 +145,34 @@ public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
       session.getUserProperties().setProperty(allPropertiesName + ALL_PROPERTIES_NO_SPACE_SUFFIX, allPropertiesWithoutSpacesString.toString().trim());
     }
     
+  }
+
+
+  /**
+   * Method takes property value and define whether default value or some new one will be used.
+   *  
+   * @param rawProperty  value in format of ${propertyName:defaultValue}
+   * @param systemProperties  properties which will be used for property definition
+   * @return
+   */
+  private String evaluateProperty(String rawProperty, Properties systemProperties) {
+    String prop = rawProperty.trim();
+    if(prop.startsWith("${") && prop.endsWith("}")) {
+      String cleanProp = prop.replace("${", "").replace("}", "");
+      String[] dividedProp = cleanProp.split(":");
+      if(dividedProp.length == 2) {
+        if(systemProperties.getProperty(dividedProp[0]) != null) {
+          return systemProperties.getProperty(dividedProp[0]);
+        } else {
+          return dividedProp[1];
+        }
+      } else {
+        getLog().warn("Strange format of property value " + rawProperty + ". Returning the whole content.");
+        return rawProperty;
+      }
+    } else {
+      return rawProperty;
+    }
   }
   
 }
