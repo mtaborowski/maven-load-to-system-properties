@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -18,13 +19,13 @@ import org.apache.maven.project.MavenProject;
  *  
  * @author Ondrej Chaloupka <ochaloup@redhat.com>
  */
-@Mojo(name = "loadProperties", defaultPhase = LifecyclePhase.INITIALIZE)
+@Mojo(name = "load", defaultPhase = LifecyclePhase.INITIALIZE)
 public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
    
   /**
    * Need for being able to fill data to maven project properties.
    */
-  @Parameter(required = true)
+  @Component
   private MavenProject project;
 
   /**
