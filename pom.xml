@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.jboss.qa</groupId>
+  <artifactId>load-to-system-properties-maven-plugin</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>maven-plugin</packaging>
+
+  <name>load-to-system-properties-maven-plugin</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.maven.api>2.0</version.maven.api>
+    <version.maven.annotations>3.2</version.maven.annotations>
+    <version.plexus.utils>1.5.6</version.plexus.utils>    
+  </properties>
+
+  <dependencies>      
+    <!-- <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <version>${version.maven.api}</version>
+    </dependency>  -->
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>${version.maven.api}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-project</artifactId>
+      <version>${version.maven.api}</version>
+    </dependency>
+    
+    <!-- dependencies to annotations -->
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${version.maven.annotations}</version>
+      <!-- annotations are not needed for plugin execution so you can remove this dependency -->
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- generated help mojo has a dependency to plexus-utils -->
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>${version.plexus.utils}</version>
+    </dependency>
+  </dependencies>
+  
+</project>
