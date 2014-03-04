@@ -4,7 +4,7 @@
 
   <groupId>org.jboss.qa</groupId>
   <artifactId>load-to-system-properties-maven-plugin</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0.Final</version>
   <packaging>maven-plugin</packaging>
 
   <name>load-to-system-properties-maven-plugin</name>

@@ -63,8 +63,8 @@ public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
   private File[] files;
   
   /**
-   * Name of system parameter where all properties will be put 
-   * in as -DpropName=propValue string.
+   * Name of system parameter where all properties will be put as one string.
+   * Meaning like -DpropName="-Dproperty=value -Dsome.other.property=value2"
    * There will be createad one more property with name ${allPropertiesName}.nospace
    * which that changes all spaces to underscore character '_'.
    */
@@ -132,8 +132,8 @@ public class LoadFileToSystemPropertiesMojo extends AbstractMojo {
     
     // setting string -Dname=value to system properties
     if(allPropertiesString.length() > 0) {
-      getLog().info("Setting " + allPropertiesName + "=" + allPropertiesString.toString().trim() + ". There is as well property with name " + 
-          allPropertiesName + ALL_PROPERTIES_NO_SPACE_SUFFIX + " created");
+      getLog().info("Setting " + allPropertiesName + "=" + allPropertiesString.toString().trim() + ". There was property " + 
+          allPropertiesName + ALL_PROPERTIES_NO_SPACE_SUFFIX + " created as well.");
       
       // Setting all properties string
       System.setProperty(allPropertiesName, allPropertiesString.toString().trim());
